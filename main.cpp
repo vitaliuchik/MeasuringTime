@@ -25,7 +25,7 @@ inline long long to_us(const D& d)
 std::vector<int> file_read(const std::string& path);
 inline void sstream_convert(std::vector<int> *int_v, std::string *str_arr);
 inline void to_string_convert(std::vector<int> *int_v, std::string *str_arr);
-inline void custom_itos(std::vector<int> *int_v, std::string *str_arr);
+inline void custom_convert(std::vector<int> *int_v, std::string *str_arr);
 
 
 int main(int argc, char *argv[]) {
@@ -54,17 +54,11 @@ int main(int argc, char *argv[]) {
     }
     if (std::stoi(argv[1]) == 3) {
         start_time = get_current_time_fenced();
-        custom_itos(&int_v, str_arr);
+        custom_convert(&int_v, str_arr);
         finish_time = get_current_time_fenced();
     }
 
     std::cout << to_us(finish_time - start_time) <<  std::endl;
-
-//    int len = 0;
-//    for (std::string &word: *str_arr) {
-//        std::cout << word << std::endl;
-//        len += word.length();
-//    }
 
     int len = 0;
     for (int i = 0; i < length; ++i) {
@@ -117,26 +111,28 @@ inline void to_string_convert(std::vector<int> *int_v, std::string *str_arr){
     }
 }
 
-inline void custom_itos(std::vector<int> *int_v, std::string *str_arr){
+inline void sscanf_convert(std::vector<int> *int_v, std::string *str_arr){
     int i = 0;
     for (int num: *int_v) {
+        str_arr[i] = std::to_string(num);
+        i++;
+    }
+}
 
+inline void custom_convert(std::vector<int> *int_v, std::string *str_arr){
+    int i = 0;
+    for (int num: *int_v) {
         if (num == 0) {
             str_arr[i] = "0";
-
-
         }
         else {
             str_arr[i]  = "";
             while (num > 0) {
                 str_arr[i] += (num % 10) + '0'; // converting int to char
                 num /= 10;
-
             }
-
         }
         ++i;
-
     }
 }
 
