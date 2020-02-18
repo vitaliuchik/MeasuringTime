@@ -7,6 +7,8 @@
 #include <chrono>
 #include <atomic>
 
+#include <cstdio>
+
 inline std::chrono::high_resolution_clock::time_point get_current_time_fenced()
 {
     std::atomic_thread_fence(std::memory_order_seq_cst);
@@ -26,6 +28,7 @@ std::vector<int> file_read(const std::string& path);
 inline void sstream_convert(std::vector<int> *int_v, std::string *str_arr);
 inline void to_string_convert(std::vector<int> *int_v, std::string *str_arr);
 inline void custom_convert(std::vector<int> *int_v, std::string *str_arr);
+inline void sscanf_convert(std::vector<int> *int_v, std::string *str_arr);
 
 
 int main(int argc, char *argv[]) {
@@ -57,6 +60,11 @@ int main(int argc, char *argv[]) {
         custom_convert(&int_v, str_arr);
         finish_time = get_current_time_fenced();
     }
+    if (std::stoi(argv[1]) == 4) {
+        start_time = get_current_time_fenced();
+        sscanf_convert(&int_v, str_arr);
+        finish_time = get_current_time_fenced();
+    }
 
     std::cout << to_us(finish_time - start_time) <<  std::endl;
 
@@ -84,7 +92,6 @@ std::vector<int> file_read(const std::string& path) {
         std::cerr << "Error opening input file" << std::endl;
         return v;
     }
-
     int x;
     while( file >> x )
         v.push_back(x);
@@ -114,7 +121,9 @@ inline void to_string_convert(std::vector<int> *int_v, std::string *str_arr){
 inline void sscanf_convert(std::vector<int> *int_v, std::string *str_arr){
     int i = 0;
     for (int num: *int_v) {
-        str_arr[i] = std::to_string(num);
+        char result[100];
+        std::sprintf( result, "%d", num );
+        str_arr[i] = result;
         i++;
     }
 }
@@ -128,7 +137,7 @@ inline void custom_convert(std::vector<int> *int_v, std::string *str_arr){
         else {
             str_arr[i]  = "";
             while (num > 0) {
-                str_arr[i] += (num % 10) + '0'; // converting int to char
+                str_arr[i] += (num % 10) + '0';
                 num /= 10;
             }
         }
