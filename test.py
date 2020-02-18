@@ -1,7 +1,7 @@
 file = open("input.txt", "r")
 
-length = 0;
-n = 0;
+length = 0
+n = 0
 for line in file:
     if n == 1:
         print(line[:-1], len(line) - 1)
